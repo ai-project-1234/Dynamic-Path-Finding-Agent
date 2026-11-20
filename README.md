@@ -321,6 +321,7 @@ The three tests check that:
 2. GBFS walks straight through the rough cells (3 moves, cost 11)
 3. On a grid without rough terrain the path cost equals the number of moves
 
+A fourth test, tests/test_replan.py, checks that after a new obstacle blocks the path the re-planned route still avoids the rough terrain. Run everything with: python -m unittest discover -s tests -t .
 ---
 
 ## Benchmark and Results
