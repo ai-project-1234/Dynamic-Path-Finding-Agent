@@ -365,6 +365,11 @@ class PathfindingApp:
                         self._drag_mode = cell.state != CellState.WALL
                         self._dragging_wall = True
                         self.grid.toggle_wall(r, c)
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                    cell_pos = self.renderer.pixel_to_cell(*event.pos)
+                    if cell_pos:
+                        r, c = cell_pos
+                        self.grid.set_cost(r, c, 1.0 if self.grid.cell(r, c).cost > 1 else 5.0)        
                 if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                     self._dragging_wall = False
                 if event.type == pygame.MOUSEMOTION and self._dragging_wall:

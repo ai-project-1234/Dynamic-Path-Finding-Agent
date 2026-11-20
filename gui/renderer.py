@@ -231,6 +231,10 @@ class GridRenderer:
 
             pygame.draw.rect(self.surface, color, inner, border_radius=br)
 
+            # Rough terrain tint
+            if cell.cost > 1 and cell.state not in (CellState.WALL, CellState.START, CellState.GOAL):
+                self._alpha_rect(inner, (210, 130, 40, 130), br)
+                
             # ── Trail depth-fade overlay ──────────────────────────
             if agent and pos in trail_set and self._trail_order:
                 depth = self._trail_depth(pos)

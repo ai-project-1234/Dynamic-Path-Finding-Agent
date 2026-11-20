@@ -32,9 +32,9 @@ def _reconstruct_path(
     return path
 
 
-def _path_cost(path: List[Tuple[int, int]]) -> float:
-    """Unit step cost (each move costs 1)."""
-    return float(len(path) - 1) if len(path) > 1 else 0.0
+def _path_cost(path: List[Tuple[int, int]], grid: Grid) -> float:
+    """Sum of the cost of entering each cell after the start."""
+    return float(sum(grid.cost_of(p) for p in path[1:]))
 
 
 # ──────────────────────────────────────────────────────────────
@@ -106,7 +106,7 @@ def gbfs_steps(
                 path=path,
                 visited=list(closed),
                 nodes_visited=nodes_visited,
-                path_cost=_path_cost(path),
+                path_cost=_path_cost(path, grid),
                 execution_time_ms=round(elapsed, 3),
                 success=True
             )
@@ -178,7 +178,7 @@ def astar_steps(
                 path=path,
                 visited=list(closed),
                 nodes_visited=nodes_visited,
-                path_cost=_path_cost(path),
+                path_cost=_path_cost(path, grid),
                 execution_time_ms=round(elapsed, 3),
                 success=True
             )
@@ -190,7 +190,7 @@ def astar_steps(
             np_ = nb.pos
             if np_ in closed:
                 continue
-            tentative_g = g_score[current] + 1.0
+            tentative_g = g_score[current] + nb.cost
             if tentative_g < g_score.get(np_, float("inf")):
                 came_from[np_] = current
                 g_score[np_] = tentative_g
