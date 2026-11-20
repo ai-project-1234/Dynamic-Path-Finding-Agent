@@ -26,6 +26,7 @@ class Cell:
     row: int
     col: int
     state: CellState = CellState.EMPTY
+    cost: float = 1.0   # 1 = normal terrain, 5 = rough
 
     @property
     def pos(self) -> Tuple[int, int]:
@@ -103,6 +104,15 @@ class Grid:
                 result.append(self._cells[nr][nc])
         return result
 
+    def cost_of(self, pos):
+        return self._cells[pos[0]][pos[1]].cost
+
+    def set_cost(self, row, col, cost):
+        cell = self._cells[row][col]
+        if cell.state in (CellState.START, CellState.GOAL, CellState.WALL):
+            return
+        cell.cost = cost
+
     def toggle_wall(self, row: int, col: int):
         """Flip wall/empty for a cell (ignores start/goal)."""
         cell = self._cells[row][col]
@@ -128,6 +138,7 @@ class Grid:
     def clear_all(self):
         """Remove all walls and reset search states."""
         for cell in self.all_cells():
+            cell.cost = 1.0
             if cell.state not in (CellState.START, CellState.GOAL):
                 cell.state = CellState.EMPTY
 
